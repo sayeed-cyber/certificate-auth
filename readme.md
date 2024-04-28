@@ -1,39 +1,48 @@
-# QR Code Certificate Authentication Website
+# Certificate Authentication Website with QR Code Generator
 
-Welcome to the QR Code Certificate Authentication Website! This project provides a simple yet effective way to authenticate certificates using QR codes. 
+Welcome to the Certificate Authentication Website with QR Code Generator project! This project provides a comprehensive solution for companies to issue certificates and implement an authentication system using QR codes.
 
 ## About
 
-This website allows users to upload QR codes containing binary data, which is then decrypted into readable text. It's particularly useful for certificate verification where data integrity is crucial.
+This project consists of a web application for certificate authentication and a QR code generator. It enables companies to issue certificates to individuals and provides an authentication system for verifying the authenticity of these certificates using QR codes.
 
 ## Features
 
-- Scan QR codes containing binary data.
-- Decrypt binary data into readable text.
-- Easily verify certificates on the go.
+- Certificate Authentication Website:
+  - Upload certificates for authentication.
+  - Decrypt binary data from QR codes into readable text.
+  - Verify the authenticity of certificates.
+
+- QR Code Generator:
+  - Generate QR codes from certificate information.
+  - Convert certificate information into binary data for QR code generation.
 
 ## How it Works
 
-1. Upload a QR code containing binary data.
-2. The website scans the QR code and decrypts the binary data.
-3. The decrypted data is displayed on the screen, providing you with the certificate information.
+### Certificate Authentication Website:
+1. Users upload certificates for authentication.
+2. The website decrypts binary data from QR codes into readable text.
+3. Certificate information is displayed for verification.
+
+### QR Code Generator:
+1. Certificate information is converted into binary format.
+2. QR codes are generated from the binary data.
+3. Generated QR codes can be used for certificate authentication.
 
 ## Usage
 
 1. Clone this repository.
-2. Open `index.html` in your preferred web browser.
-3. Upload a QR code containing binary data.
-4. View the decrypted data on the screen.
+2. Certificate Authentication Website:
+    - Open `index.html` in your preferred web browser to access the Certificate Authentication Website.
+    - Upload certificates for authentication.
+    - Verify certificate authenticity using the provided QR code authentication system.
+3. QR Code Generator:
+    - Run the Python script `generate_qr_code.py` to generate QR codes from certificate information.
+    - Use the generated QR codes for certificate verification.
 
-## Contributing
+## Installation
 
-Contributions are welcome! Feel free to submit issues or pull requests if you have any suggestions or improvements.
+To run the Certificate Authentication Website locally, ensure you have Python installed. Then, install the required dependencies using the following command:
 
-## License
-
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
-
-## Acknowledgements
-
-Special thanks to [contributors](https://github.com/your-username/your-repo/contributors) who have helped to improve this project.
-
+```bash
+pip install -r requirements.txt
