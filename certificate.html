@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html>
+ <head><!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-DPC30FVZ8Y"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-DPC30FVZ8Y');
+</script>
+  <title>Innoovatum's certificate authentication</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: aqua;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      background-color: #ebaeae;
+    }
+
+    h1 {
+      font-size: 32px;
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    #video-container {
+      position: relative;
+      width: 100%;
+      max-width: 500px;
+      margin-bottom: 20px;
+    }
+
+    #video-preview {
+      width: 100%;
+      height: auto;
+      transform: scaleX(-1);
+    }
+
+    .result-section {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      margin-bottom: 20px;
+      width: 100%;
+      max-width: 500px;
+      text-align: center;
+    }
+
+    #result {
+      text-align: center;
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    #decoded-text {
+      text-align: center;
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    .upload-button {
+      background-color: #4286f4;
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 14px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      margin-bottom: 10px;
+    }
+
+    .upload-button:hover {
+      background-color: #3577e1;
+    }
+
+    .scan-again-button {
+      background-color: #f4d942;
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 14px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .scan-again-button:hover {
+      background-color: #e1ca37;
+    }
+
+    #file-input {
+      display: none;
+    }
+
+    @media (max-width: 600px) {
+      body {
+        padding: 20px;
+      }
+
+      h1 {
+        font-size: 24px;
+      }
+
+      .container {
+        padding: 20px;
+      }
+
+      .result-section {
+        width: 100%;
+        max-width: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Innoovatum certificate authentication</h1>
+    <div id="video-container">
+      <video id="video-preview" playsinline></video>
+    </div>
+    <div class="result-section">
+      <h2>certificate unique ID</h2>
+      <div id="result"></div>
+    </div>
+    <div class="result-section">
+      <h2>certificate details</h2>
+      <div id="decoded-text"></div>
+    </div>
+    <label for="file-input" class="upload-button">Upload QR Code</label>
+    <input id="file-input" type="file" accept="image/*" onchange="processImage(event)">
+    <button class="scan-again-button" onclick="scanAgain()">Scan Again</button>
+  </div>
+
+  <script src="https://rawgit.com/schmich/instascan-builds/master/instascan.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jsqr/dist/jsQR.js"></script>
+  <script>
+    let scanner;
+
+    function startScanner() {
+      const video = document.getElementById('video-preview');
+      scanner = new Instascan.Scanner({ video });
+
+      scanner.addListener('scan', function (content) {
+        scanner.stop();
+        document.getElementById('result').innerHTML = content;
+        const decodedText = binaryToText(content);
+        document.getElementById('decoded-text').innerHTML = decodedText;
+      });
+
+      Instascan.Camera.getCameras()
+        .then(function (cameras) {
+          let selectedCamera;
+          cameras.forEach(function (camera) {
+            if (camera.name.toLowerCase().includes('back')) {
+              selectedCamera = camera;
+            }
+          });
+
+          if (selectedCamera) {
+            scanner.start(selectedCamera);
+          } else if (cameras.length > 0) {
+            scanner.start(cameras[0]);
+          } else {
+            console.error('No cameras found.');
+          }
+        })
+        .catch(function (error) {
+          console.error('Camera access denied:', error);
+        });
+    }
+
+    function binaryToText(binary) {
+      const binaryArray = binary.split(' ');
+      let text = '';
+      for (let i = 0; i < binaryArray.length; i++) {
+        const charCode = parseInt(binaryArray[i], 2);
+        const char = String.fromCharCode(charCode);
+        text += char;
+      }
+      return text;
+    }
+
+    function processImage(event) {
+      const file = event.target.files[0];
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        const image = new Image();
+        image.onload = function () {
+          const canvas = document.createElement('canvas');
+          const context = canvas.getContext('2d');
+          canvas.width = image.width;
+          canvas.height = image.height;
+          context.drawImage(image, 0, 0, image.width, image.height);
+          const imageData = context.getImageData(0, 0, image.width, image.height);
+          const decodedQR = jsQR(imageData.data, imageData.width, imageData.height);
+          if (decodedQR) {
+            const content = decodedQR.data;
+            document.getElementById('result').innerHTML = content;
+            const decodedText = binaryToText(content);
+            document.getElementById('decoded-text').innerHTML = decodedText;
+          } else {
+            console.error('No QR code found in the uploaded image.');
+          }
+        };
+        image.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function scanAgain() {
+      if (scanner) {
+        scanner.start(scanner.camera);
+      }
+    }
+
+    // Start scanning QR codes using the back camera
+    startScanner();
+  </script>
+</body>
+</html>
