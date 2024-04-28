@@ -21,13 +21,16 @@ This project consists of a web application for certificate authentication and a 
 
 ### Certificate Authentication Website:
 1. Users upload certificates for authentication.
-2. The website decrypts binary data from QR codes into readable text.
+2. The website decrypts data from QR codes into readable text.
 3. Certificate information is displayed for verification.
 
 ### QR Code Generator:
-1. Certificate information is converted into binary format.
-2. QR codes are generated from the binary data.
-3. Generated QR codes can be used for certificate authentication.
+![Alt Text](pythonapp.png)
+
+1. Certificate information is encrypted for security.
+2. Encrypted data is used to generate QR codes.
+3. Generated QR codes can be used for certificate verification.
+
 
 ## Usage
 
